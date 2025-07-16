@@ -1,4 +1,4 @@
-import { Layout, Avatar, Badge, Dropdown, Space } from "antd";
+import { Layout, Avatar, Badge, Dropdown, Space, message } from "antd";
 import {
   BellOutlined,
   UserOutlined,
@@ -6,13 +6,15 @@ import {
   ProfileOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../api/authApi";
+import { useAuth } from "../../hooks/useAuth";
 
 const AppHeader = () => {
+  const {logout} =  useAuth()
    const handleLogout = async()=>{
         try {
             await logout()
             navigate("/login")
+            message.success("Đăng xuất thành công")
         } catch (error) {
             console.log(error)
         }

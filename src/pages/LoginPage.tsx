@@ -10,7 +10,7 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const onFinish = async (values: LoginFormValues) => {
     try {
-      const msg   = await login(values.username, values.password)
+      const msg = await login(values.username, values.password)
       message.success(msg)
       navigate("/");
     } catch (error) {

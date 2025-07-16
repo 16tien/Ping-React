@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import {  Layout, Menu, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -63,7 +64,7 @@ const App: React.FC = () => {
               borderRadius: borderRadiusLG,
             }}
           >
-            Bill is a cat.
+            <Outlet/>
           </div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
