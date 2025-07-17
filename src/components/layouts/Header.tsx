@@ -10,15 +10,16 @@ import { useAuth } from "../../hooks/useAuth";
 
 const AppHeader = () => {
   const {logout} =  useAuth()
-   const handleLogout = async()=>{
-        try {
-            await logout()
-            navigate("/login")
-            message.success("Đăng xuất thành công")
-        } catch (error) {
-            console.log(error)
-        }
-   }
+   const handleLogout = async () => {
+  try {
+    await logout(); 
+    message.success("Đăng xuất thành công");
+    navigate("/login");
+  } catch (error) {
+    console.error(error);
+    message.error("Đăng xuất thất bại");
+  }
+};
 
   const navigate = useNavigate();
   const { Header } = Layout;

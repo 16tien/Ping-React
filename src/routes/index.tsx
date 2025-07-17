@@ -2,7 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import App from "../App";
 import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
+// import HomePage from "../pages/HomePage";
+import DevicePage from "../pages/DevicePage";
+
 
 export const router = createBrowserRouter([
   {
@@ -18,7 +20,7 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <HomePage />,
+            element: <DevicePage />,
           },
           {
             

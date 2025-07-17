@@ -1,5 +1,5 @@
 import { useUser } from "../contexts/UserContext";
-import { loginApi } from "../api/authApi";
+import { loginApi, logoutApi } from "../api/authApi";
 
 export const useAuth = () => {
   const { user, setUser, removeUser } = useUser();
@@ -10,7 +10,8 @@ export const useAuth = () => {
     return message;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await logoutApi()
     removeUser(); 
   };
 

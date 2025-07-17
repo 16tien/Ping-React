@@ -13,6 +13,6 @@ export const checkAuth = async () => {
   return axiosInstance.get("/auth/me");
 };
 
-export const logout = async () => {
+export const logoutApi = async () => {
   return axiosInstance.post("/logout");
 };
