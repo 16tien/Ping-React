@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { TableProps, TablePaginationConfig } from 'antd';
-import type { DeviceTypeUI } from '../types/deviceTypeUi';
+import type { DeviceTypeUI } from '../types/deviceTypeUI';
 import { getAllDevices } from '../api/deviceApi';
 import { useSearch } from './useSearch';
 

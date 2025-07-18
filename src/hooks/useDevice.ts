@@ -1,6 +1,5 @@
-
 import { useEffect, useState } from "react";
-import type { DeviceTypeUI } from "../types/deviceTypeUi";
+import type { DeviceTypeUI } from "../types/deviceTypeUI";
 import { getDeviceById } from "../api/deviceApi";
 
 export const useDevice = (id?: string) => {
@@ -14,8 +13,7 @@ export const useDevice = (id?: string) => {
       try {
         const deviceData = await getDeviceById(id); 
         setDevice(deviceData); 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (err) {
+      } catch {
         setError("Không tìm thấy thiết bị");
         setDevice(null); 
       }

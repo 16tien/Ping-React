@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useDevicesTable } from '../hooks/useDevicesTable';
-import type { DeviceTypeUI } from '../types/deviceTypeUi';
+import type { DeviceTypeUI } from '../types/deviceTypeUI';
 import { useEffect } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { useNavigate } from 'react-router-dom';
