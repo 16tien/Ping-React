@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "../components/PrivateRoute";
 import App from "../App";
 import LoginPage from "../pages/LoginPage";
-// import HomePage from "../pages/HomePage";
+import HomePage from "../pages/HomePage";
 import DevicePage from "../pages/DevicePage";
-
+import PingDetailPage from "../pages/PingDetailPage"
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +23,12 @@ export const router = createBrowserRouter([
             element: <DevicePage />,
           },
           {
-            
+            path: "home",
+            element: <HomePage/>
+          },
+          {
+            path: "/devices/:id",
+            element: <PingDetailPage/>
           }
         ],
       },

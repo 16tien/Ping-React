@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { TableProps, TablePaginationConfig } from 'antd';
-import type { DeviceTypeUI } from '../types/deviceTypeUi';
-import { getAllDevices } from '../api/deviceApi';
 import { useSearch } from './useSearch';
 
 interface TableParams {
@@ -11,11 +9,15 @@ interface TableParams {
   sortOrder?: 'ascend' | 'descend';
 }
 
-export const useDevicesTable = () => {
-  const [data, setData] = useState<DeviceTypeUI[]>([]);
+interface UseTableDataProps<T> {
+  fetchApi: (params: Record<string, string>) => Promise<{ data: T[]; total: number }>;
+}
+
+export const useTableData = <T extends object>({ fetchApi }: UseTableDataProps<T>) => {
+  const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
   const [total, setTotal] = useState(0);
-  const { keyword } = useSearch()
+  const { keyword } = useSearch();
 
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
@@ -29,7 +31,6 @@ export const useDevicesTable = () => {
 
   const fetchData = async (params: TableParams) => {
     setLoading(true);
-
     const { pagination, sortField, sortOrder, filters } = params;
 
     const queryParams: Record<string, string> = {
@@ -41,9 +42,11 @@ export const useDevicesTable = () => {
       queryParams.orderby = sortField;
       queryParams.order = sortOrder === 'ascend' ? 'asc' : 'desc';
     }
+
     if (keyword) {
       queryParams.keyword = keyword;
     }
+
     if (filters) {
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -53,11 +56,11 @@ export const useDevicesTable = () => {
     }
 
     try {
-      const { data: devices, total } = await getAllDevices(queryParams);
-      setData(devices || []);
+      const { data: resultData, total } = await fetchApi(queryParams);
+      setData(resultData || []);
       setTotal(total || 0);
     } catch (err) {
-      console.error('Error fetching devices:', err);
+      console.error('Error fetching table data:', err);
       setData([]);
     } finally {
       setLoading(false);
@@ -66,10 +69,9 @@ export const useDevicesTable = () => {
 
   useEffect(() => {
     fetchData(tableParams);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableParams, keyword]);
 
-  const handleTableChange: TableProps<DeviceTypeUI>['onChange'] = (
+  const handleTableChange: TableProps<T>['onChange'] = (
     pagination,
     filters,
     sorter

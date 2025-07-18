@@ -1,10 +1,12 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Input, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { useDevicesTable } from '../hooks/useDevicesTable';
-import type { DeviceType } from '../types/deviceType';
-
-const columns: ColumnsType<DeviceType> = [
+import type { DeviceTypeUI } from '../types/deviceTypeUi';
+import { useEffect } from "react";
+import { useSearch } from "../hooks/useSearch";
+import { useNavigate } from 'react-router-dom';
+const columns: ColumnsType<DeviceTypeUI> = [
   {
     title: 'Tên thiết bị',
     dataIndex: 'name',
@@ -44,16 +46,37 @@ const columns: ColumnsType<DeviceType> = [
 ];
 
 const DevicePage: React.FC = () => {
+  const navigate = useNavigate();
   const { data, loading, pagination, handleTableChange } = useDevicesTable();
+  const { setSearchComponent, setKeyword } = useSearch();
+  useEffect(() => {
+    setSearchComponent?.(
+      <Input.Search
+        placeholder="Tìm kiếm thiết bị..."
+        onChange={(e) => setKeyword(e.target.value)}
+        allowClear
+        style={{ width: 250, marginTop: 15 }}
+      />
+    );
 
+    return () => setSearchComponent?.(null); // cleanup
+  }, [setKeyword, setSearchComponent]);
   return (
-    <Table<DeviceType>
+    <Table<DeviceTypeUI>
       columns={columns}
       rowKey={(record) => record.device_id.toString()}
       dataSource={data}
       loading={loading}
       pagination={pagination}
-      onChange={handleTableChange} // ✅ Không còn lồng vào object tableParams
+      onChange={handleTableChange}
+      onRow={(record) => {
+        return {
+          onClick: () => {
+            navigate(`/devices/${record.device_id}`)
+          },
+          style:{cursor:'pointer'}
+        };
+      }}
     />
   );
 };

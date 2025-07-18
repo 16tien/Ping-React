@@ -1,4 +1,4 @@
-export interface DeviceType {
+export interface DeviceTypeUI {
   device_id: number;
   name: string;
   ip_address: string;
