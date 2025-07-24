@@ -105,5 +105,6 @@ export const useDevicesTable = () => {
       total,
     },
     handleTableChange,
+    refetch: () => fetchData(tableParams), 
   };
 };

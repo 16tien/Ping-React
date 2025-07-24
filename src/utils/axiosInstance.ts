@@ -6,7 +6,7 @@ import axios, {
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:8081/api",
-  withCredentials: true, // Quan trọng để gửi kèm cookie
+  withCredentials: true, 
 });
 
 interface FailedRequest {

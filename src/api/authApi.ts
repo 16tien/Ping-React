@@ -2,7 +2,7 @@ import type { LoginResponse } from "../types/auth";
 import axiosInstance from "../utils/axiosInstance";
 
 export const loginApi = async (email: string, password: string): Promise<LoginResponse> => {
-  const res= await axiosInstance.post("/login", {
+  const res = await axiosInstance.post("/login", {
     email: email,
     password: password,
   });

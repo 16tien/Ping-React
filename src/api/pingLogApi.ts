@@ -7,7 +7,7 @@ export const fetchPingLogs = async (
   const res = await axiosInstance.get('/pings/pingLogById', { params });
 
   return {
-    data: res.data?.items || [],   
-    total: res.data?.total || 0,   
+    data: res.data?.items || [],
+    total: res.data?.total || 0,
   };
 };

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import AppHeader from "./Header";
 import {
   DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { useUser } from "../../contexts/UserContext";
+
 
 const { Content, Footer, Sider } = Layout;
 
@@ -37,22 +38,54 @@ const App: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-const items: MenuItem[] = [
-  getItem('Trang chủ', '/', <PieChartOutlined />),
-  getItem('Thiết bị', '/home', <DesktopOutlined />),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
-];
+  const { user } = useUser();
+
+  const items: MenuItem[] = [
+    getItem('Trang chủ', '/', <PieChartOutlined />),
+
+
+
+    ...(user?.role === "admin"
+      ? [
+        getItem('Quản lý thiết bị', '/home', <DesktopOutlined />, [
+          getItem('Thêm thiết bị', 'devices/add'),
+        ]),
+        getItem('Quản lý người dùng', 'sub2', <TeamOutlined />, [
+          getItem('Danh sách người dùng', '/users'),
+          getItem('Thêm người dùng', '/users/add'),
+        ]),
+      ]
+      : []),
+
+  ];
+
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+        <div
+          style={{
+            height: 64,
+            margin: 16,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            borderRadius: 8,
+          }}
+        >
+          {collapsed ? (
+            <img src="/logo-small.png" alt="Logo" style={{ height: 32 }} />
+          ) : (
+            <img src="/logo.png" alt="Logo" style={{ height: 32 }} />
+          )}
+        </div>
         <div className="demo-logo-vertical" />
-         <Menu
+        <Menu
           theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}
-          onClick={({ key }) => navigate(key)} // điều hướng
+          onClick={({ key }) => navigate(key)} 
           items={items}
         />
       </Sider>

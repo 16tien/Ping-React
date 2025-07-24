@@ -1,54 +1,41 @@
-import React from 'react';
-import { Input, Table } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
+import { Input, message, Table } from 'antd';
 import { useDevicesTable } from '../hooks/useDevicesTable';
 import type { DeviceTypeUI } from '../types/deviceTypeUI';
 import { useEffect } from "react";
 import { useSearch } from "../hooks/useSearch";
 import { useNavigate } from 'react-router-dom';
-const columns: ColumnsType<DeviceTypeUI> = [
-  {
-    title: 'Tên thiết bị',
-    dataIndex: 'name',
-    sorter: true,
-    width: '20%',
-  },
-  {
-    title: 'IP Address',
-    dataIndex: 'ip_address',
-    width: '20%',
-  },
-  {
-    title: 'Người quản lý',
-    dataIndex: ['manager', 'manager_name'],
-    width: '20%',
-  },
-  {
-    title: 'Trạng thái',
-    dataIndex: ['pinglog', 'status'],
-    render: (status: boolean) => (
-      <span style={{ color: status ? 'green' : 'red' }}>
-        {status ? 'Online' : 'Offline'}
-      </span>
-    ),
-    filters: [
-      { text: 'Online', value: true },
-      { text: 'Offline', value: false },
-    ],
-    onFilter: (value, record) => record.pinglog.status === value,
-    width: '20%',
-  },
-  {
-    title: 'Thời gian ping gần nhất',
-    dataIndex: ['pinglog', 'ping_time'],
-    width: '20%',
-  },
-];
+import { getDeviceColumns } from '../utils/getDeviceColumns'
+import { useUser } from '../contexts/UserContext';
+import { deleteDevice } from '../api/deviceApi';
+
+
 
 const DevicePage: React.FC = () => {
   const navigate = useNavigate();
-  const { data, loading, pagination, handleTableChange } = useDevicesTable();
+  const { data, loading, pagination, handleTableChange, refetch } = useDevicesTable();
   const { setSearchComponent, setKeyword } = useSearch();
+  const { user } = useUser();
+  const role: "admin" | "user" = user?.role ?? "user";
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  const handleEdit = (record: DeviceTypeUI) => {
+    navigate(`/devices/edit/${record.device_id}`);
+  };
+
+  const handleDelete = async (record: DeviceTypeUI) => {
+    try {
+      setDeletingId(record.device_id);
+      await deleteDevice(record.device_id);
+      message.success(`Đã xoá thiết bị "${record.name}" thành công`);
+      refetch(); 
+    } catch (error) {
+      console.error("Xoá thất bại:", error);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   useEffect(() => {
     setSearchComponent?.(
       <Input.Search
@@ -59,11 +46,11 @@ const DevicePage: React.FC = () => {
       />
     );
 
-    return () => setSearchComponent?.(null); // cleanup
+    return () => setSearchComponent?.(null); 
   }, [setKeyword, setSearchComponent]);
   return (
     <Table<DeviceTypeUI>
-      columns={columns}
+      columns={getDeviceColumns(role, handleEdit, handleDelete, deletingId)}
       rowKey={(record) => record.device_id.toString()}
       dataSource={data}
       loading={loading}
@@ -74,7 +61,7 @@ const DevicePage: React.FC = () => {
           onClick: () => {
             navigate(`/devices/${record.device_id}`)
           },
-          style:{cursor:'pointer'}
+          style: { cursor: 'pointer' }
         };
       }}
     />

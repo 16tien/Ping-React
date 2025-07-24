@@ -45,8 +45,8 @@ const AppHeader = () => {
 
   return (
     <Layout.Header style={styles.header}>
+      
       <div style={styles.title}>{title}</div>
-
       <Space size="large">
         {searchComponent}
         <Badge count={3}>
@@ -62,7 +62,6 @@ const AppHeader = () => {
 
 export default AppHeader;
 
-// 💡 Styles tách riêng dễ chỉnh sửa
 const styles = {
   header: {
     background: "#fff",

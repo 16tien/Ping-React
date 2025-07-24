@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import type { DeviceTypeUI } from "../types/deviceTypeUI";
+import type { DeviceData } from "../types/deviceData";
 import { getDeviceById } from "../api/deviceApi";
 
 export const useDevice = (id?: string) => {
-  const [device, setDevice] = useState<DeviceTypeUI | null>(null);
+  const [device, setDevice] = useState<DeviceData | null>(null);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {

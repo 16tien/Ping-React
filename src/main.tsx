@@ -11,9 +11,7 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <HeaderTitleProvider>
         <SearchProvider>
-
           <RouterProvider router={router} />
-
         </SearchProvider>
       </HeaderTitleProvider>
     </AuthProvider>

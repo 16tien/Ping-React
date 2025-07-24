@@ -1,34 +1,45 @@
 import { useState } from "react";
 
+type SetValue<T> = T | ((prevValue: T) => T);
+
 export function useLocalStorage<T>(key: string, initialValue: T) {
+  const isClient = typeof window !== "undefined";
+
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
+      if (!isClient) return initialValue;
+
       const item = window.localStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialValue;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      console.error("Error reading localStorage key", key);
+      console.error(`Error reading localStorage key "${key}":`, error);
       return initialValue;
     }
   });
 
-  const setValue = (value: T) => {
+  const setValue = (value: SetValue<T>) => {
     try {
-      setStoredValue(value);
-      window.localStorage.setItem(key, JSON.stringify(value));
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const valueToStore =
+        value instanceof Function ? value(storedValue) : value;
+
+      setStoredValue(valueToStore);
+
+      if (isClient) {
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      }
     } catch (error) {
-      console.error("Error setting localStorage key", key);
+      console.error(`Error setting localStorage key "${key}":`, error);
     }
   };
 
   const removeValue = () => {
     try {
       setStoredValue(initialValue);
-      window.localStorage.removeItem(key);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      if (isClient) {
+        window.localStorage.removeItem(key);
+      }
     } catch (error) {
-      console.error("Error removing localStorage key", key);
+      console.error(`Error removing localStorage key "${key}":`, error);
     }
   };
 

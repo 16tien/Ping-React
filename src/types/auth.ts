@@ -3,10 +3,12 @@ export interface LoginFormValues {
   password: string;
 }
 
+
 export interface User {
   id: number;
+  name: string;
   email: string;
-  role: string;
+  role: "admin" | "user";
 }
 
 export interface LoginResponse {
