@@ -9,7 +9,7 @@ import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from "../../contexts/UserContext";
-
+import logo from "../../assets/images/logo.png";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -47,7 +47,8 @@ const App: React.FC = () => {
 
     ...(user?.role === "admin"
       ? [
-        getItem('Quản lý thiết bị', '/home', <DesktopOutlined />, [
+        getItem('Quản lý thiết bị', 'device', <DesktopOutlined />, [
+          getItem('Danh sách', '/devices'),
           getItem('Thêm thiết bị', 'devices/add'),
         ]),
         getItem('Quản lý người dùng', 'sub2', <TeamOutlined />, [
@@ -65,27 +66,30 @@ const App: React.FC = () => {
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div
           style={{
-            height: 64,
-            margin: 16,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
-            borderRadius: 8,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          {collapsed ? (
-            <img src="/logo-small.png" alt="Logo" style={{ height: 32 }} />
-          ) : (
-            <img src="/logo.png" alt="Logo" style={{ height: 32 }} />
-          )}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "12px",
+              width: "80px",
+              height: "80px",
+            }}
+          >
+            <img src={logo} alt="Signal" style={{ width: "100%", height: "100%" }} />
+          </div>
         </div>
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
           mode="inline"
           selectedKeys={[location.pathname]}
-          onClick={({ key }) => navigate(key)} 
+          onClick={({ key }) => navigate(key)}
           items={items}
         />
       </Sider>

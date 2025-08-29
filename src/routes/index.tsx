@@ -9,6 +9,7 @@ import { RequireRole } from "../components/RequireRole";
 import EditDevicePage from "../pages/EditDevicePage";
 import UserTable from "../pages/UserTable";
 import AddUserPage from "../pages/AddUserPage";
+import HomePage from "../pages/HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -24,21 +25,27 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <DevicePage />,
+            element: <HomePage />,
           },
+          {
+            path: "devices",
+            element: <DevicePage />
+           
+          },
+          
           {
             path: "devices/add",
             element: <RequireRole allowedRoles={["admin"]}>
               <AddDevicePage />
             </RequireRole>
           },
-           {
+          {
             path: "devices/edit/:id",
             element: <RequireRole allowedRoles={["admin"]}>
               <EditDevicePage />
             </RequireRole>
           },
-            {
+          {
             path: "users",
             element: <RequireRole allowedRoles={["admin"]}>
               <UserTable />

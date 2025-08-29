@@ -1,3 +1,4 @@
+import type { DashboardData } from "../hooks/useDashboardData";
 import axiosInstance from "../utils/axiosInstance";
 
 
@@ -21,3 +22,8 @@ export const updateDevice = async (id: number, data: unknown) => {
   const res = await axiosInstance.put(`/devices/updateDevice/${id}`, data)
   return res.data
 }
+
+export const getDashboardData = async (): Promise<DashboardData> => {
+  const res = await axiosInstance.get<DashboardData>("/dashboard");
+  return res.data;
+};
